@@ -1,0 +1,28 @@
+name: CI/CD Pipeline
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python  # Или Node.js, если проект на JS
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: pytest tests/  # Путь к вашим тестам
+
+  deploy:
+    needs: test  # Ждем успешного прохождения тестов
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Здесь будет деплой!"
